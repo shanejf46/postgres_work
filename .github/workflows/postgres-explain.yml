@@ -1,0 +1,25 @@
+name: Run Postgres Explain
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+# 1. Define the job and runner
+  explain:
+    runs-on: centos-latest
+    
+# 2. Check out your code (if your SQL files are in the repo)
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+# 3. Connect and run EXPLAIN via psql
+      - name: Run EXPLAIN Query
+        env:
+          PGHOST: 192.168.1.158
+          PGPORT: 5432
+          PGUSER: postgres
+          PGPASSWORD: password
+          PGDATABASE: shanesdb
+        run: |
+          psql -c "EXPLAIN ANALYZE SELECT from customers;"
