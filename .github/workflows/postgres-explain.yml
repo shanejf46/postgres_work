@@ -1,25 +1,24 @@
-name: Run Postgres Explain
+name: Run Postgres Explain Plan
 
 on:
   push:
     branches: [ main ]
 
 jobs:
-# 1. Define the job and runner
-  explain:
-    runs-on: centos-latest
-    
-# 2. Check out your code (if your SQL files are in the repo)
-      - name: Checkout code
+  explain-query:
+    runs-on: self-hosted  # Change to match your CentOS 9 runner label if needed
+
+    env:
+      PGHOST: ${{ secrets.PG_HOST }}
+      PGPORT: ${{ secrets.PG_PORT }}
+      PGUSER: ${{ secrets.PG_USER }}
+      PGPASSWORD: ${{ secrets.PG_PASSWORD }}
+      PGDATABASE: ${{ secrets.PG_DATABASE }}
+
+    steps:
+      - name: Checkout Code
         uses: actions/checkout@v4
 
-# 3. Connect and run EXPLAIN via psql
-      - name: Run EXPLAIN Query
-        env:
-          PGHOST: 192.168.1.158
-          PGPORT: 5432
-          PGUSER: postgres
-          PGPASSWORD: password
-          PGDATABASE: shanesdb
+      - name: Run EXPLAIN on Postgres
         run: |
-          psql -c "EXPLAIN ANALYZE SELECT from customers;"
+          psql -v ON_ERROR_STOP=1 -c "EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) SELECT * FROM customers WHERE customer_id = 6;"
