@@ -1,0 +1,66 @@
+version: 1
+
+name: postgres-explain-plan
+
+inputs:
+  - name: host
+    label: PostgreSQL Host
+    type: string
+    required: true
+    example: db.example.com
+
+  - name: port
+    label: Port
+    type: integer
+    default: 5432
+
+  - name: database
+    label: Database Name
+    type: string
+    required: true
+
+  - name: schema
+    label: Schema Name
+    type: string
+    default: public
+
+  - name: username
+    label: Username
+    type: string
+    required: true
+
+  - name: password
+    label: Password
+    type: password
+    required: true
+
+  - name: query
+    label: SQL Query
+    type: textarea
+    required: true
+
+steps:
+  - name: Set Search Path
+    sql: |
+      SET search_path TO {{ inputs.schema }};
+
+  - name: Explain Query
+    sql: |
+      EXPLAIN (
+        ANALYZE,
+        BUFFERS,
+        VERBOSE,
+        FORMAT JSON
+      )
+      {{ inputs.query }};
+
+    connection:
+      host: "{{ inputs.host }}"
+      port: "{{ inputs.port }}"
+      database: "{{ inputs.database }}"
+      username: "{{ inputs.username }}"
+      password: "{{ inputs.password }}"
+
+outputs:
+  - name: explain_plan
+    from: Explain Query
