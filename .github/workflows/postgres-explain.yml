@@ -1,3 +1,6 @@
+permissions:
+  contents: read # Required for actions/checkout to clone private repos
+  
 name: Run Postgres Explain Plan
 
 on:
