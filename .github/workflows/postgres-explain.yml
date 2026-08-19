@@ -1,6 +1,3 @@
-permissions:
-  contents: read # Required for actions/checkout to clone private repos
-  
 name: Run Postgres Explain Plan
 
 on:
@@ -37,6 +34,9 @@ on:
 jobs:
   explain-query:
     runs-on: self-hosted
+    permissions:
+      contents: read # 👈 CRITICAL: Must be explicitly included
+      packages: write # (or any other custom permissions you have)
 
     env:
       PGHOST: ${{ inputs.pg_host }}
