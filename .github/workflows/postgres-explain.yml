@@ -58,11 +58,11 @@ jobs:
           
       - name: Test PostgreSQL connection
         run: |
-          /usr/pgsql-17/bin/psql -v ON_ERROR_STOP=1 -c "SELECT version();"
+          /usr/pgsql-17/bin/psql -v ON_ERROR_STOP=1 -d ${{PGDATABASE}} -U ${{PGUSER}} -c "SELECT version();"
           
       - name: Run EXPLAIN on Postgres
         env:
           USER_QUERY: ${{ inputs.query_text }}
         run: |
           /usr/pgsql-17/bin/psql -v ON_ERROR_STOP=1 \
-            -c "EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) $USER_QUERY"
+            -d ${{PGDATABASE}} -U ${{PGUSER}} -c "EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) $USER_QUERY"
