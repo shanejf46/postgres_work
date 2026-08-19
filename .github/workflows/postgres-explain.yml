@@ -58,7 +58,7 @@ jobs:
           
       - name: Test PostgreSQL connection
         run: |
-          psql -v ON_ERROR_STOP=1 -c "SELECT version();"
+          /usr/pgsql-17/bin/psql -v ON_ERROR_STOP=1 -c "SELECT version();"
           
       - name: Run EXPLAIN on Postgres
         env:
