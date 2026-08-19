@@ -2,11 +2,11 @@ name: Run Postgres Explain Plan
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   explain-query:
-  runs-on: self-hosted  # Change to match your CentOS 9 runner label if needed
+    runs-on: self-hosted
 
     env:
       PGHOST: ${{ secrets.PG_HOST }}
@@ -19,6 +19,15 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Verify PostgreSQL client
+        run: |
+          psql --version
+
+      - name: Test PostgreSQL connection
+        run: |
+          psql -v ON_ERROR_STOP=1 -c "SELECT version();"
+
       - name: Run EXPLAIN on Postgres
         run: |
-          psql -v ON_ERROR_STOP=1 -c "EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) SELECT * FROM customers WHERE customer_id = 6;"
+          psql -v ON_ERROR_STOP=1 \
+            -c "EXPLAIN (ANALYZE, BUFFERS, FORMAT JSON) SELECT * FROM customers WHERE customer_id = 6;"
