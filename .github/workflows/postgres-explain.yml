@@ -48,6 +48,9 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          submodules: true
 
       - name: Verify PostgreSQL client
         run: |
