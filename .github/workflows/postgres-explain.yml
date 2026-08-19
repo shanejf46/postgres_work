@@ -17,16 +17,14 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Verify PostgreSQL client
         run: |
           psql --version
-
       - name: Test PostgreSQL connection
         run: |
           psql -v ON_ERROR_STOP=1 -c "SELECT version();"
-
       - name: Run EXPLAIN on Postgres
         run: |
           psql -v ON_ERROR_STOP=1 \
