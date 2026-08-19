@@ -6,7 +6,7 @@ on:
 
 jobs:
   explain-query:
-    runs-on: self-hosted  # Change to match your CentOS 9 runner label if needed
+  runs-on: self-hosted  # Change to match your CentOS 9 runner label if needed
 
     env:
       PGHOST: ${{ secrets.PG_HOST }}
